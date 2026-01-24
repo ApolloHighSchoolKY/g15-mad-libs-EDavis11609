@@ -1,4 +1,4 @@
-//© A+ Computer Science  -  www.apluscompsci.com
+// A+ Computer Science  -  www.apluscompsci.com
 //Name -
 //Date -
 //Class -
@@ -17,26 +17,47 @@ public class MadLib
 	private ArrayList<String> nouns = new ArrayList<String>();
 	private ArrayList<String> adjectives = new ArrayList<String>();
 	private String story = "";
+	private Random rand = new Random();
 
 	public MadLib()
 	{
-
+		verbs.add("run");
+		nouns.add("Jonathan Leohr");
+		adjectives.add("purple");
+		story = "Jonathan Leohr run down the purple road.";
 	}
 
-	public MadLib(String fileName)
+	public MadLib(String fileName) throws IOException
 	{
 		//load stuff
-
+		loadNouns();
+		loadVerbs();
+		loadAdjectives();
 		try
 		{
 			//Read the different parts of the story and concatenate the resulting
 			//story using the symbols to tell you the parts of speech
-
+			Scanner chopper = new Scanner(new File(fileName));
 
 			//While there is more of the story, read in the word/symbol
-
+			while(chopper.hasNext())
+			{
 				//If what was read in is one of the symbols, find a random
 				//word to replace it.
+				if(chopper.next().equals("#"))
+				{
+					story += getRandomNoun();
+				}
+				else if(chopper.next().equals("@"))
+				{
+					story += getRandomVerb();
+				}
+				else if(chopper.next().equals("&"))
+				{
+					story += getRandomAdjective();
+				}
+				else
+					story += chopper.next();
 			}
 
 
@@ -48,11 +69,17 @@ public class MadLib
 
 	}
 
-	public void loadNouns()
+	public void loadNouns() throws IOException
 	{
 		try
 		{
+			Scanner nounReader = new Scanner(new File("nouns.dat"));
 
+			while(nounReader.hasNext())
+			{
+				nouns.add(nounReader.nextLine());
+			}
+			nounReader.close();
 		}
 		catch(Exception e)
 		{
@@ -61,11 +88,17 @@ public class MadLib
 
 	}
 
-	public void loadVerbs()
+	public void loadVerbs() throws IOException
 	{
 		try
 		{
+			Scanner verbReader = new Scanner(new File("verbs.dat"));
 
+			while(verbReader.hasNext()) 
+			{
+				verbs.add(verbReader.nextLine());
+			}
+			verbReader.close();
 		}
 		catch(Exception e)
 		{
@@ -73,11 +106,17 @@ public class MadLib
 		}
 	}
 
-	public void loadAdjectives()
+	public void loadAdjectives() throws IOException
 	{
 		try
 		{
+			Scanner adjReader = new Scanner(new File("adjectives.dat"));
 
+			while(adjReader.hasNext())
+			{
+				adjectives.add(adjReader.nextLine());
+			}
+			adjReader.close();
 		}
 		catch(Exception e)
 		{
@@ -85,19 +124,25 @@ public class MadLib
 		}
 	}
 
-	public String getRandomVerb()
+	public String getRandomVerb() 
 	{
-		return "";
+		int randomVerb = rand.nextInt(verbs.size());
+
+		return verbs.get(randomVerb);
 	}
 
-	public String getRandomNoun()
+	public String getRandomNoun() 
 	{
-		return "";
+		int randomNoun = rand.nextInt(nouns.size());
+
+		return nouns.get(randomNoun);
 	}
 
-	public String getRandomAdjective()
+	public String getRandomAdjective() 
 	{
-		return "";
+		int randomAdj = rand.nextInt(adjectives.size());
+
+		return adjectives.get(randomAdj);
 	}
 
 	public String toString()
